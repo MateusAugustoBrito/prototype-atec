@@ -1,0 +1,1536 @@
+/* Camada de marca por cima do SLDS real — cores/classes copiadas de
+   atecNavegacao.css e atecListagem.css (mesmo portal) para o protótipo
+   parecer que está dentro do sistema. */
+
+body {
+  margin: 0;
+  font-family: "Salesforce Sans", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: #f3f4f6;
+  color: #080707;
+}
+
+/* ---------- header (cores reais de atecNavegacao.css) ---------- */
+.nav-container {
+  background-color: #232224;
+  padding: 0.6rem 1.25rem;
+  border-bottom: 2px solid #484649;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.top-bar-left.brand h4 {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.reset-link {
+  color: #ffffff;
+  font-size: 0.75rem;
+  text-decoration: underline;
+  opacity: 0.85;
+}
+
+.reset-link:hover {
+  opacity: 1;
+}
+
+/* ---------- wrapper/cards (classes reais de atecListagem.css) ---------- */
+.resumo-wrapper {
+  background-color: #f3f4f6;
+  padding: 1.25rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.resumo-section {
+  background-color: #ffffff;
+  border: 1px solid #e0e2e5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
+  padding: 1.25rem;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #080707;
+  margin: 0;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.breadcrumb {
+  font-size: 0.8rem;
+  color: #514f4d;
+}
+
+.breadcrumb a {
+  color: #0070d2;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.link {
+  color: #0070d2;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  color: #514f4d;
+  padding: 2rem 0;
+}
+
+/* ---------- formulário (grid + slds-form-element real) ---------- */
+.form-grid-slds {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.9rem 1.25rem;
+}
+
+.form-grid-slds .slds-size_1-of-1 {
+  grid-column: 1 / -1;
+}
+
+.field-error {
+  color: #c23934;
+  font-size: 0.78rem;
+}
+
+/* ---------- etapas / checklist ---------- */
+.etapa-box {
+  border: 1px solid #e0e2e5;
+  border-radius: 8px;
+  background: #fafaf9;
+}
+
+.etapa-titulo {
+  margin-top: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.etapa-responsavel {
+  font-weight: 400;
+  color: #514f4d;
+  font-size: 0.8rem;
+}
+
+.etapa-fim-escopo {
+  color: #514f4d;
+  font-style: italic;
+}
+
+.checklist-titulo {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.1rem;
+}
+
+.checklist-subtitulo {
+  color: #514f4d;
+  font-size: 0.8rem;
+  margin-bottom: 0.75rem;
+}
+
+.checklist-bloco {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.checklist-bloco:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.bloco-titulo {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #16325c;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  padding-left: 0.6rem;
+  border-left: 3px solid #0070d2;
+}
+
+.checklist-table {
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.checklist-table thead th {
+  background: #f4f6f9;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #514f4d;
+}
+
+.checklist-table tbody th {
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: #3e3e3c;
+}
+
+/* ---------- grupo de opções em pill (substitui o slds-radio_button-group,
+   que não renderiza bem via CDN — visual próprio, moderno) ---------- */
+.choice-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.choice-pill-wrap {
+  display: inline-flex;
+}
+
+.choice-pill-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.choice-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border: 1px solid #c9c7c5;
+  border-radius: 1.5rem;
+  background: #ffffff;
+  color: #3e3e3c;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.25;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease-in-out;
+  max-width: 220px;
+}
+
+.choice-pill:hover {
+  border-color: #0070d2;
+  color: #0070d2;
+  box-shadow: 0 1px 3px rgba(0, 112, 210, 0.15);
+}
+
+.choice-pill-input:checked + .choice-pill {
+  background: #0070d2;
+  border-color: #0070d2;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 112, 210, 0.35);
+}
+
+.choice-pill-input:focus-visible + .choice-pill {
+  outline: 2px solid #0070d2;
+  outline-offset: 2px;
+}
+
+.checklist-table .choice-group {
+  flex-wrap: nowrap;
+}
+
+.checklist-table .choice-pill {
+  padding: 0.35rem 0.8rem;
+  white-space: nowrap;
+}
+
+/* ---------- checkbox moderno (lista/critérios) ---------- */
+.choice-checkbox-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+}
+
+.choice-checkbox-input {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.1rem;
+  accent-color: #0070d2;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.choice-checkbox-label {
+  font-size: 0.85rem;
+  color: #3e3e3c;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+/* ---------- campos somente-leitura (classes reais de atecDetalhe.css) ---------- */
+.field-label {
+  display: block;
+  font-size: 0.75rem;
+  color: #514f4d;
+  margin-bottom: 0.25rem;
+}
+
+.field-value-container {
+  border-bottom: 1px solid #e0e2e5;
+  padding-bottom: 0.5rem;
+  min-height: 24px;
+}
+
+.field-value {
+  color: #3e3e3c;
+  font-size: 0.9rem;
+}
+
+/* ---------- seções da aba Relacionados (mesmas cores de atecDetalhe.css) ---------- */
+.resumo-section_header {
+  padding: 0.6rem 1rem;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.resumo-section_header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #080707;
+}
+
+.resumo-section_header.green {
+  background-color: #34d399;
+}
+.resumo-section_header.blueComentario {
+  background-color: #06b6d4;
+}
+.resumo-section_header.blueVistoriaDeUnidade {
+  background-color: #0070d2;
+}
+.resumo-section_header.bluePersonalizacao {
+  background-color: #3c3fc5;
+}
+.resumo-section_header.blueMateriais {
+  background-color: #2563eb;
+}
+.resumo-section_header.blueHistoricoAlteracoes {
+  background-color: #6366f1;
+}
+
+@media (max-width: 768px) {
+  .form-grid-slds {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- toast ---------- */
+.toast {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  max-width: 420px;
+  background: #04844b;
+  color: #fff;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.3rem;
+  font-size: 0.85rem;
+  z-index: 9001;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.toast--error {
+  background: #ba0517;
+}
+
+.toast--warning {
+  background: #8c4b02;
+}
+
+/* ============================================================
+   Fluxo em etapas (v2): seletor de perfil, path, etapa atual,
+   histórico, evidências, assinatura e prévias de e-mail.
+   ============================================================ */
+.top-bar-nota {
+  color: #e8e8e8;
+  font-size: 0.8rem;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.role-label {
+  color: #e8e8e8;
+  font-size: 0.75rem;
+}
+
+.role-select {
+  background: #3a393c;
+  color: #fff;
+  border: 1px solid #6b696d;
+  border-radius: 4px;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+.top-bar {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.top-bar-right {
+  flex-wrap: wrap;
+}
+
+.listagem-acoes {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hint {
+  font-size: 0.78rem;
+  color: #514f4d;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+/* badges de status */
+.slds-badge.badge-info { background: #e3f3fd; color: #014486; }
+.slds-badge.badge-warning { background: #fef1e8; color: #8c4b02; }
+.slds-badge.badge-error { background: #fddde3; color: #8e030f; }
+.slds-badge.badge-success { background: #dcf5e6; color: #056a3a; }
+.slds-badge.badge-muted { background: #ecebea; color: #514f4d; }
+
+/* path: etapas concluídas mostram o nome com ✓ (o ícone do SLDS vem de um
+   sprite externo que não renderiza via <use> cross-origin) */
+.slds-path__item.slds-is-complete .slds-path__stage {
+  display: none;
+}
+
+.slds-path__item.slds-is-complete .slds-path__title {
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: #fff;
+}
+
+.slds-path__item.slds-is-complete .slds-path__title::before {
+  content: "✓ ";
+}
+
+/* path: etapa pulada */
+.slds-path__item.path-nao-se-aplica .slds-path__title {
+  text-decoration: line-through;
+  opacity: 0.55;
+}
+
+.slds-path__item.path-nao-se-aplica {
+  background: repeating-linear-gradient(135deg, #f3f3f3 0 6px, #ececec 6px 12px);
+}
+
+/* selos */
+.selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.selo {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+}
+
+.selo-bloco {
+  display: block;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.selo-info { background: #e3f3fd; color: #014486; }
+.selo-warning { background: #fef1e8; color: #8c4b02; }
+.selo-error { background: #fddde3; color: #8e030f; }
+.selo-success { background: #dcf5e6; color: #056a3a; }
+
+/* etapa atual */
+.etapa-box {
+  padding: 1.25rem;
+}
+
+.etapa-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.etapa-header .etapa-titulo {
+  margin: 0;
+}
+
+.etapa-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: #e3f3fd;
+  color: #014486;
+}
+
+.chip-muted {
+  background: #ecebea;
+  color: #514f4d;
+}
+
+.etapa-corpo {
+  border: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.etapa-corpo[disabled] {
+  opacity: 0.6;
+}
+
+.aviso-perfil {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  background: #fef1e8;
+  border: 1px solid #f9c88c;
+  color: #6b3a00;
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 1rem;
+  font-size: 0.82rem;
+}
+
+.aviso-perfil__btns {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.btn-trocar {
+  font-size: 0.75rem;
+}
+
+.etapa-ajuda {
+  font-size: 0.8rem;
+  color: #514f4d;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.etapa-botoes {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.etapa-corpo > fieldset,
+.etapa-corpo .slds-form-element {
+  margin-bottom: 0.75rem;
+}
+
+.previsao {
+  font-size: 0.8rem;
+  color: #014486;
+  background: #f1f7fd;
+  border-radius: 6px;
+  padding: 0.45rem 0.7rem;
+  margin: 0.25rem 0 0.5rem;
+}
+
+.input-moeda {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.input-moeda span {
+  font-size: 0.8rem;
+  color: #514f4d;
+}
+
+.resumo-linhas {
+  display: grid;
+  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+  gap: 0.3rem 1rem;
+  margin: 0 0 0.9rem;
+  font-size: 0.83rem;
+}
+
+.resumo-linhas dt {
+  color: #514f4d;
+}
+
+.resumo-linhas dd {
+  margin: 0;
+  color: #080707;
+  white-space: pre-line;
+}
+
+/* evidências */
+.input-arquivo {
+  display: block;
+  font-size: 0.8rem;
+  margin: 0.25rem 0;
+}
+
+.anexos-lista {
+  list-style: none;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  font-size: 0.8rem;
+}
+
+.anexos-lista li {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.link-remover {
+  border: none;
+  background: none;
+  color: #ba0517;
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.fotos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.6rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.foto {
+  position: relative;
+  margin: 0;
+  border: 1px solid #e0e2e5;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.foto img {
+  display: block;
+  width: 100%;
+  height: 90px;
+  object-fit: cover;
+}
+
+.foto figcaption {
+  font-size: 0.68rem;
+  padding: 0.2rem 0.4rem;
+  color: #514f4d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.foto-remover {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* histórico / trilha */
+.fluxo-details {
+  margin-top: 1rem;
+  border: 1px solid #e0e2e5;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  background: #fff;
+}
+
+.fluxo-details summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #16325c;
+}
+
+.fluxo-details[open] summary {
+  margin-bottom: 0.6rem;
+}
+
+.mini-table {
+  font-size: 0.78rem;
+}
+
+.mini-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.hist-sistema td {
+  background: #f8f9fb;
+  color: #514f4d;
+}
+
+.hist-detalhe {
+  color: #514f4d;
+  font-size: 0.75rem;
+  margin-top: 0.1rem;
+}
+
+.linha-media td {
+  font-weight: 700;
+}
+
+.aprov-historico {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* e-mail / devolutiva */
+.banner-email {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  background: #f1f7fd;
+  border: 1px solid #b8d7f4;
+  border-radius: 6px;
+  padding: 0.55rem 0.8rem;
+  font-size: 0.82rem;
+  margin-bottom: 0.9rem;
+}
+
+.codigo {
+  font-family: "Courier New", monospace;
+  letter-spacing: 0.15em;
+  font-size: 1rem;
+}
+
+.email-preview {
+  width: 100%;
+  height: 60vh;
+  border: 1px solid #e0e2e5;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.devolutiva {
+  margin: 0.75rem 0;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border: 1px solid #e0e2e5;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.trilha-aprovadores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.trilha-aprovadores li {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: #ecebea;
+  color: #514f4d;
+}
+
+.trilha-aprovadores li.is-feito { background: #dcf5e6; color: #056a3a; }
+.trilha-aprovadores li.is-atual { background: #0070d2; color: #fff; }
+
+/* assinatura */
+.assinatura-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.assinatura {
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  aspect-ratio: 460 / 150;
+  border: 1px dashed #969492;
+  border-radius: 6px;
+  background: #fff;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.assinatura-img {
+  display: block;
+  max-width: 300px;
+  border: 1px solid #e0e2e5;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .aprov-historico {
+    grid-template-columns: 1fr;
+  }
+  .resumo-linhas {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* termo de vistoria (documento para o cliente assinar) */
+.termo-doc {
+  background: #fff;
+  border: 1px solid #e0e2e5;
+  border-radius: 8px;
+  padding: 1.5rem;
+  color: #181818;
+}
+
+.termo-doc__topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  border-bottom: 2px solid #16325c;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.termo-doc__selo {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #706e6b;
+}
+
+.termo-doc__titulo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #16325c;
+}
+
+.termo-doc__numero {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.termo-doc__secao {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #16325c;
+  margin: 1.25rem 0 0.4rem;
+}
+
+.termo-doc__texto {
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.termo-doc__fotos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 0.5rem;
+}
+
+.termo-doc__fotos img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #e0e2e5;
+}
+
+.termo-doc__assinatura {
+  margin-top: 1.5rem;
+  max-width: 320px;
+}
+
+.termo-doc__assinatura img {
+  display: block;
+  width: 100%;
+}
+
+.termo-doc__linha {
+  border-top: 1px solid #181818;
+  padding-top: 0.25rem;
+  font-weight: 600;
+}
+
+.termo-doc__data {
+  font-size: 0.75rem;
+  color: #706e6b;
+}
+
+/* o termo como uma folha de papel dentro da etapa */
+.termo-folha {
+  background: #eef1f6;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.termo-folha .termo-doc {
+  max-width: 760px;
+  margin: 0 auto;
+  border: 0;
+  box-shadow: 0 1px 2px rgba(22, 50, 92, 0.08), 0 8px 24px rgba(22, 50, 92, 0.1);
+  padding: 2rem 2.25rem;
+}
+
+.termo-doc__coleta {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 0.75rem;
+  max-width: 460px;
+}
+
+.termo-doc__coleta .termo-doc__secao {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .termo-folha { padding: 0.5rem; }
+  .termo-folha .termo-doc { padding: 1.25rem 1rem; }
+}
+
+.termo-impressao {
+  background: #fff;
+  padding: 1.5rem;
+}
+
+.termo-impressao .termo-doc {
+  border: 0;
+  padding: 0;
+}
+
+@media print {
+  .termo-impressao { padding: 0; }
+}
+
+/* página da vistoria (aberta em outra aba) */
+.vist-pagina {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.vist-topo {
+  background: #fff;
+  border: 1px solid #e0e2e5;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.vist-topo__selo {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #0070d2;
+}
+
+.vist-topo__titulo {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #16325c;
+  margin: 0.15rem 0;
+}
+
+.vist-topo__sub {
+  color: #514f4d;
+}
+
+.vist-passos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.vist-passos li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem 0.35rem 0.4rem;
+  border-radius: 999px;
+  background: #f3f3f3;
+  color: #514f4d;
+  font-size: 0.85rem;
+}
+
+.vist-passos__num {
+  display: inline-grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: #fff;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.vist-passos li.is-atual { background: #0070d2; color: #fff; }
+.vist-passos li.is-atual .vist-passos__num { color: #0070d2; }
+.vist-passos li.is-feito { background: #dcf5e6; color: #056a3a; }
+
+.vist-corpo {
+  background: #fff;
+  border: 1px solid #e0e2e5;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .vist-topo, .vist-corpo { padding: 1rem; }
+}
+
+/* aba Detalhe (espelho do LWC atecDetalhe) */
+.detalhe-acoes {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.detalhe-campo {
+  margin-bottom: 0.75rem;
+}
+
+.detalhe-campo .slds-select,
+.detalhe-campo .slds-input,
+.detalhe-campo .slds-textarea {
+  width: 100%;
+}
+
+.detalhe-nota {
+  font-size: 0.7rem;
+  color: #706e6b;
+  margin-top: 0.15rem;
+}
+
+/* texto digitado pelo usuário sem espaços (ex.: "testeteste...") quebra
+   dentro do card em vez de estourar a largura da tela */
+.resumo-linhas dt,
+.resumo-linhas dd,
+.field-value,
+.termo-doc__texto,
+.mini-table td,
+.selo {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.resumo-linhas dt {
+  max-width: 22rem;
+}
+
+/* checklist somente leitura (Triagem / briefing do Portal): dois itens por
+   linha em cada seção, para a lista não ficar comprida demais */
+.checklist-leitura .resumo-linhas {
+  grid-template-columns: repeat(2, minmax(0, max-content) minmax(0, 1fr));
+  column-gap: 1.25rem;
+}
+
+.checklist-leitura .resumo-linhas dt {
+  max-width: 16rem;
+}
+
+@media (max-width: 768px) {
+  .checklist-leitura .resumo-linhas {
+    grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+  }
+}
+
+/* checklist somente leitura em accordion */
+.ck-acordeao {
+  margin-top: 1rem;
+  border: 1px solid #e0e2e5;
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.ck-acordeao__topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.6rem 0.9rem;
+  background: #f7f9fb;
+  border-bottom: 1px solid #e0e2e5;
+}
+
+.ck-acordeao__rotulo {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #16325c;
+}
+
+.ck-acordeao__acoes {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.link-botao {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: #0070d2;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.link-botao:hover { text-decoration: underline; }
+
+.ck-acordeao__item + .ck-acordeao__item {
+  border-top: 1px solid #eef0f3;
+}
+
+.ck-acordeao__cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.9rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.ck-acordeao__cabecalho::-webkit-details-marker { display: none; }
+
+/* seta que gira ao abrir */
+.ck-acordeao__cabecalho::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-right: 2px solid #706e6b;
+  border-bottom: 2px solid #706e6b;
+  transform: rotate(-45deg);
+  transition: transform 160ms ease-out;
+  flex-shrink: 0;
+}
+
+.ck-acordeao__item[open] > .ck-acordeao__cabecalho::before { transform: rotate(45deg); }
+.ck-acordeao__cabecalho:hover { background: #f7f9fb; }
+
+.ck-acordeao__titulo {
+  flex: 1;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #16325c;
+}
+
+.ck-acordeao__contagem {
+  font-size: 0.72rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: #fef1e5;
+  color: #8c4b02;
+  white-space: nowrap;
+}
+
+.ck-acordeao__contagem.is-completo { background: #dcf5e6; color: #056a3a; }
+
+.ck-acordeao__corpo {
+  padding: 0.25rem 0.9rem 0.6rem 2rem;
+}
+
+.ck-acordeao__corpo .resumo-linhas { margin-bottom: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ck-acordeao__cabecalho::before { transition: none; }
+}
+
+/* seções com o preenchimento das etapas concluídas */
+.etapa-preenchida .section-title {
+  align-items: center;
+}
+
+.etapa-preenchida__meta {
+  font-size: 0.78rem;
+  color: #706e6b;
+  margin: -0.25rem 0 0.75rem;
+}
+
+.etapa-preenchida .ck-acordeao {
+  margin-top: 0.5rem;
+}
+
+.etapa-preenchida .fotos-grid {
+  margin-top: 0.35rem;
+}
+
+.termo-resumo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e0e2e5;
+  border-radius: 8px;
+  background: #f7f9fb;
+}
+
+.termo-resumo__acoes {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* etapa Planejamento: instrução para criar a cotação */
+.instrucao-cotacao {
+  border: 1px solid #c9d9ee;
+  background: #f3f8fe;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin: 0.75rem 0;
+}
+
+.instrucao-cotacao__titulo {
+  font-weight: 700;
+  color: #16325c;
+  margin-bottom: 0.4rem;
+}
+
+.instrucao-cotacao ol {
+  margin: 0 0 0.5rem 1.2rem;
+  list-style: decimal;
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+/* modal Criar Cotação (espelho do atecCriarCotacao) */
+.cot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.cot-radio {
+  margin-bottom: 1rem;
+}
+
+.cot-radio .slds-radio {
+  display: block;
+  margin: 0.2rem 0;
+}
+
+.cot-total {
+  border: 1px solid #e0e2e5;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  background: #f7f9fb;
+  align-self: start;
+}
+
+.cot-total__valor {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #16325c;
+}
+
+.cot-itens__topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.cot-adicionar {
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  background: #0176d3;
+  border-radius: 4px;
+}
+
+.cot-itens td { vertical-align: top; }
+.cot-itens .slds-input { min-width: 6rem; }
+
+.cot-remover {
+  width: 2rem;
+  height: 2rem;
+}
+
+.tabela-cotacoes .cotacao-detalhe td {
+  background: #f7f9fb;
+}
+
+.cotacao-detalhe__corpo {
+  padding: 0.5rem 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .cot-grid { grid-template-columns: 1fr; }
+}
+
+.mini-table th.num { text-align: right; }
+
+.recusa-entrega {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #f3c1c1;
+  border-radius: 8px;
+  background: #fef6f6;
+}
+
+/* ============================================================
+   Portal: faixa do protótipo, navegação (atecNavegacao.css),
+   Início (atecResumo.css) e Listagem (atecListagem.css)
+   ============================================================ */
+.demo-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding: 0.3rem 1rem;
+  background: #fff4d6;
+  border-bottom: 1px solid #f0d58c;
+  font-size: 0.75rem;
+}
+
+.demo-bar__nota { color: #6b4e00; font-weight: 600; }
+.demo-bar .role-label { color: #6b4e00; }
+.demo-bar .role-select { background: #fff; color: #080707; border-color: #d8c27a; }
+.demo-bar .reset-link { color: #6b4e00; }
+
+.nav-container {
+  --cor-fundo-principal: #232224;
+  --cor-borda: #484649;
+  --cor-fundo-hover: #3f3e42;
+  --cor-fundo-active: #4a4950;
+  background-color: var(--cor-fundo-principal);
+  padding: 0.5rem 1rem 0 1rem;
+  border-bottom: 2px solid var(--cor-borda);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.nav-container .top-bar { justify-content: space-between; flex-wrap: nowrap; }
+.nav-container .brand { display: flex; align-items: center; gap: 0.75rem; }
+.nav-container .brand h4 { color: #fff; font-weight: 700; font-size: 1.5rem; margin: 0; }
+.nav-container .logo { width: 85px; height: auto; vertical-align: middle; }
+.nav-container .top-bar-right { gap: 1.25rem; flex-wrap: nowrap; }
+.welcome-text { color: #e8e8e8; font-size: 1.5rem; white-space: nowrap; font-weight: 500; }
+
+.user-menu { position: relative; }
+.user-avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: 0;
+  background: #c9c7c5;
+  color: #3e3e3c;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.user-menu-dropdown {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  width: 150px;
+  background-color: #fff;
+  border: 1px solid var(--cor-borda);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 101;
+  overflow: hidden;
+}
+.user-menu-item .menu-action-item { display: flex; align-items: center; gap: 0.5rem; color: #080707; cursor: pointer; padding: 0.75rem 1rem; }
+.user-menu-item:hover { background-color: #f8f9fa; }
+
+.nav-container .bottom-bar { display: flex; align-items: center; padding-left: 0.5rem; }
+.nav-item + .nav-item { margin-left: 0.75rem; }
+.nav-item a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  border-bottom: 3px solid transparent;
+  transition: background-color 0.25s ease-in-out, transform 0.25s ease-in-out;
+  font-weight: 500;
+}
+.nav-item a:hover { background-color: var(--cor-fundo-hover); color: #f0f0f0; text-decoration: none; transform: translateY(-1px); }
+.nav-item.active a { font-weight: 700; background-color: var(--cor-fundo-active); border-bottom: 3px solid #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); }
+.nav-item .menu-label { line-height: 1.2; font-size: 0.95rem; }
+
+/* Início */
+.inicio-titulo { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.inicio-titulo .section-title { margin-bottom: 0; }
+.section-subtitle { font-size: 0.9rem; color: #514f4d; margin-bottom: 1.5rem; }
+.shadow-card {
+  background-color: #fff;
+  border: 1px solid #e0e2e5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
+  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+.shadow-card:hover { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transform: translateY(-2px); }
+.summary-flex-container { display: flex; align-items: stretch; gap: 0.5rem; flex-wrap: wrap; width: 100%; }
+.summary-flex-container > div { min-width: 0; }
+.summary-col-main { flex: 2 1 0%; display: flex; flex-direction: column; }
+.summary-col-stats { flex: 1 1 0%; display: flex; flex-direction: column; gap: 0.5rem; }
+.main-stat-card, .stat-card { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; padding: 1rem 0.5rem; }
+.main-stat-card { height: 100%; cursor: pointer; }
+.stat-card { min-height: 90px; }
+.main-stat-value { font-size: 2.5rem; font-weight: 700; color: #080707; line-height: 1; }
+.main-stat-label { font-size: 1rem; color: #514f4d; margin-top: 0.5rem; }
+.stat-value { font-size: 1.75rem; font-weight: 600; color: #080707; }
+.stat-label { font-size: 0.75rem; color: #3e3e3c; line-height: 1.2; }
+.scroll-container { width: 100%; display: flex; gap: 1rem; padding: 0.5rem 1rem; overflow-x: auto; }
+.atec-card { flex: 0 0 auto; width: clamp(200px, 90%, 290px); display: flex; flex-direction: column; padding: 1rem; cursor: pointer; box-sizing: border-box; }
+.atec-card:active { transform: translateY(0) scale(0.98); }
+.card-header { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 0.5rem; }
+.badge-critico { background-color: #ffe8e8 !important; color: #c23934 !important; border: 1px solid #c23934; align-self: flex-start; }
+.atec-vencer--critico { border-left: 5px solid #ea001e; }
+.atec-vencer--atencao { border-left: 5px solid #ffb75d; }
+.sla-legend { margin-right: 1rem; font-size: 0.8rem; padding-left: 12px; position: relative; }
+.sla-legend::before { content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 8px; height: 8px; border-radius: 50%; }
+.sla-legend.sla-critico::before { background-color: #ea001e; }
+.sla-legend.sla-atencao::before { background-color: #ffb75d; }
+.sla-legend.atec-open::before { background-color: rgba(255, 99, 132, 1); }
+.sla-legend.atec-close::before { background-color: rgba(75, 192, 192, 1); }
+.empty-message { width: 100%; padding: 1rem 0; color: #514f4d; }
+.slds-button_success { background: #2e844a; border-color: #2e844a; color: #fff; }
+.slds-button_success:hover { background: #22683e; color: #fff; }
+.slds-button_stretch { width: 100%; justify-content: center; }
+
+.grafico-wrap { width: 100%; overflow-x: auto; }
+.grafico-semanal { width: 100%; min-width: 520px; height: auto; display: block; }
+.grafico-titulo { font-size: 13px; font-weight: 700; fill: #3e3e3c; }
+.grafico-eixo { font-size: 11px; fill: #514f4d; }
+.grafico-grade { stroke: #e5e5e5; }
+.grafico-zero { stroke: #000; }
+
+/* Listagem */
+.filtros-listagem .slds-form-element { width: 100%; }
+.multi { position: relative; }
+.multi__resumo { list-style: none; cursor: pointer; display: flex; align-items: center; min-height: 2rem; padding: 0 2rem 0 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.multi__resumo::-webkit-details-marker { display: none; }
+.multi__opcoes { position: absolute; z-index: 20; top: calc(100% + 2px); left: 0; right: 0; min-width: 14rem; max-height: 16rem; overflow-y: auto; background: #fff; border: 1px solid #dddbda; border-radius: 4px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); padding: 0.25rem 0; }
+.multi__opcao { display: flex; gap: 0.5rem; align-items: center; padding: 0.35rem 0.75rem; font-size: 0.8rem; cursor: pointer; }
+.multi__opcao:hover { background: #f3f3f3; }
+.tabela-listagem { background: #fff; border: 1px solid #e0e2e5; border-radius: 8px; }
+.tabela-listagem th, .tabela-listagem td { white-space: nowrap; }
+.tabela-listagem .decoration { color: #0070d2; font-weight: 600; }
+.listagem-rodape { font-size: 0.75rem; color: #706e6b; margin-top: 0.5rem; }
+
+@media (max-width: 768px) {
+  .nav-container .bottom-bar { display: none; }
+  .nav-container .brand h4 { font-size: 1.3rem; }
+  .nav-container .logo { width: 75px; }
+  .welcome-text { font-size: 1rem; }
+  .summary-flex-container { display: block; }
+  .summary-flex-container > div { margin-bottom: 0.5rem; }
+  .main-stat-value { font-size: 2rem; }
+  .atec-card { width: 100%; max-width: 260px; }
+}
+
+.inicio-acoes { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+/* Triagem: resultado da garantia pelo Habite-se */
+.garantia-painel { border-radius: 8px; padding: 0.85rem 1rem; margin: 1rem 0; border: 1px solid; }
+.garantia-painel.is-garantia { background: #ebf7ee; border-color: #91db8b; }
+.garantia-painel.is-vencida { background: #fef1ee; border-color: #f4a49b; }
+.garantia-painel__resultado { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+.is-garantia .garantia-painel__resultado { color: #2e844a; }
+.is-vencida .garantia-painel__resultado { color: #ba0517; }
+.garantia-painel .resumo-linhas { margin-bottom: 0.4rem; }
+.garantia-painel__regra { font-size: 0.75rem; color: #514f4d; }
+
+/* Ficha Corporativa de Aprovação */
+.ficha-secao { border: 1px solid #e3e8ee; border-radius: 8px; padding: 0.9rem 1rem 1rem; margin: 1rem 0; background: #fff; }
+.ficha-secao__titulo { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #16325c; margin: -0.9rem -1rem 0.85rem; padding: 0.6rem 1rem; background: #eef6ec; border-bottom: 1px solid #d9ead3; border-radius: 8px 8px 0 0; }
+.ficha-secao__num { display: inline-grid; place-items: center; width: 1.4rem; height: 1.4rem; border-radius: 50%; background: #2e844a; color: #fff; font-size: 0.72rem; }
+.ficha-pergunta { display: grid; grid-template-columns: minmax(0, 18rem) minmax(0, 1fr); gap: 0.25rem 1rem; align-items: center; padding: 0.4rem 0; border-bottom: 1px solid #f3f4f6; }
+.ficha-pergunta__rotulo { font-size: 0.82rem; color: #3e3e3c; }
+.ficha-secao .form-grid-slds { margin-top: 0.5rem; }
+.email-preview--pagina { height: 75vh; margin: 0.75rem 0; }
+@media (max-width: 768px) { .ficha-pergunta { grid-template-columns: 1fr; } }

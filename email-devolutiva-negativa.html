@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sua solicitação de assistência técnica {{numero}}</title>
+  <!--
+    Modelo da devolutiva enviada automaticamente ao cliente quando a Negativa
+    é aprovada (Supervisora ATEC → Head CRC → Diretor). {{devolutiva}} recebe o
+    texto aprovado. No protótipo, a prévia preenche os campos via hash da URL;
+    em produção, troque {{campo}} pelos merge fields do Salesforce.
+    Assunto: Sua solicitação de assistência técnica {{numero}}
+  -->
+</head>
+<body style="margin:0;padding:24px;background:#f3f4f6;font-family:Arial,Helvetica,sans-serif;color:#1f2937;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background:#ffffff;border:1px solid #e0e2e5;border-radius:8px;">
+    <tr>
+      <td style="background:#232224;color:#ffffff;padding:16px 24px;border-radius:8px 8px 0 0;font-size:18px;font-weight:bold;">Opus · Assistência Técnica</td>
+    </tr>
+    <tr>
+      <td style="padding:24px;font-size:14px;line-height:1.6;">
+        <p style="margin:0 0 12px;">Olá, {{solicitante}},</p>
+        <p style="margin:0 0 16px;">Concluímos a análise da sua solicitação <strong>{{numero}}</strong> ({{item}} — {{empreendimento}}, unidade {{unidade}}).</p>
+        <div style="margin:0 0 20px;padding:14px 16px;background:#f8f9fb;border:1px solid #e5e7eb;border-radius:6px;white-space:pre-line;">{{devolutiva}}</div>
+        <p style="margin:0 0 4px;">Em caso de dúvidas, fale com a nossa equipe de relacionamento.</p>
+        <p style="margin:0 0 20px;">Atenciosamente,<br />Equipe de Assistência Técnica Opus</p>
+        <p style="margin:0;font-size:12px;color:#6b7280;">E-mail automático. Não responda a esta mensagem.</p>
+      </td>
+    </tr>
+  </table>
+  <script>
+    // Somente para a prévia do protótipo: preenche {{campo}} a partir do hash.
+    (function () {
+      if (!location.hash) return;
+      var dados = JSON.parse(decodeURIComponent(location.hash.slice(1)));
+      var esc = function (s) { return String(s).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); };
+      var trocar = function (t, html) { return t.replace(/\{\{(\w+)\}\}/g, function (m, k) { return k in dados ? (html ? esc(dados[k]) : dados[k]) : m; }); };
+      document.title = trocar(document.title, false);
+      document.body.innerHTML = trocar(document.body.innerHTML, true);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Protótipo ATEC — Portal Assistência Técnica</title>
+  <!-- Salesforce Lightning Design System real (mesmo CSS usado pelos componentes lightning-* do portal) -->
+  <link rel="stylesheet" href="https://unpkg.com/@salesforce-ux/design-system@2.264.1/assets/styles/salesforce-lightning-design-system.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/png" href="img/favicon-opus.png" />
+</head>
+<body>
+  <!-- Faixa só do protótipo (perfil e dados de teste); o menu abaixo é o do portal -->
+  <div class="demo-bar">
+    <span class="demo-bar__nota">Protótipo · Portal Assistência Técnica</span>
+    <div id="header-controls" class="header-controls"></div>
+  </div>
+  <!-- Navegação do portal (LWC atecNavegacao) -->
+  <header class="nav-container" id="portal-nav"></header>
+
+  <div class="resumo-wrapper">
+    <div id="app-root"></div>
+  </div>
+
+  <script src="dados-portal.js"></script>
+  <script src="data.js"></script>
+  <script src="store.js"></script>
+  <script src="slds.js"></script>
+  <script src="seeds.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>[ATEC] Ficha de aprovação</title>
+  <!--
+    E-mail enviado à Supervisora ATEC ou ao Diretor quando a aprovação do reparo
+    cai na alçada deles. Leva a Ficha Corporativa de Aprovação (Garantia |
+    Assistência Técnica | Exceções) preenchida pelo analista.
+    Assunto: [ATEC] {numero} — Ficha de aprovação do reparo ({valor})
+    No protótipo, o conteúdo chega pelo hash da URL (JSON) e é montado abaixo;
+    em produção, o mesmo layout é gerado no servidor (tabelas e estilos inline,
+    compatíveis com clientes de e-mail).
+  -->
+</head>
+<body style="margin:0;padding:24px 12px;background:#eef1f5;font-family:Arial,Helvetica,sans-serif;color:#1f2937;">
+  <div id="email"></div>
+  <script>
+    (function () {
+      if (!location.hash) return;
+      var d = JSON.parse(decodeURIComponent(location.hash.slice(1)));
+      var esc = function (s) {
+        return String(s == null || s === "" ? "-" : s).replace(/[&<>"]/g, function (c) {
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+        });
+      };
+
+      var CORES_RISCO = { Baixo: "#2e844a", "Médio": "#b86e00", Alto: "#ba0517" };
+
+      // opções em "pílulas": marcadas em destaque, as demais apagadas
+      function opcoes(lista, marcadas, risco) {
+        return lista.map(function (op) {
+          var on = marcadas.indexOf(op) >= 0;
+          var cor = risco && CORES_RISCO[op] ? CORES_RISCO[op] : "#16325c";
+          var estilo = on
+            ? "background:" + cor + ";color:#ffffff;border:1px solid " + cor + ";font-weight:bold;"
+            : "background:#ffffff;color:#9aa3ae;border:1px solid #dfe3e8;";
+          return '<span style="display:inline-block;margin:2px 4px 2px 0;padding:3px 10px;border-radius:999px;font-size:12px;' + estilo + '">' +
+            (on ? "&#10003; " : "") + esc(op) + "</span>";
+        }).join("");
+      }
+
+      function linha(l) {
+        var valor = l.opcoes ? opcoes(l.opcoes, l.marcadas || [], l.risco) : '<span style="white-space:pre-line;">' + esc(l.valor) + "</span>";
+        return '<tr>' +
+          '<td style="padding:8px 12px 8px 0;width:42%;vertical-align:top;font-size:13px;color:#5b6573;border-bottom:1px solid #f0f2f5;">' + esc(l.rotulo) + "</td>" +
+          '<td style="padding:8px 0;vertical-align:top;font-size:13px;color:#111827;border-bottom:1px solid #f0f2f5;">' + valor + "</td></tr>";
+      }
+
+      function tabela(t) {
+        var th = t.colunas.map(function (c, i) {
+          return '<th style="padding:8px;background:#f3f6f9;color:#16325c;font-size:12px;text-align:' + (i >= t.numDesde ? "right" : "left") + ';border-bottom:1px solid #dfe3e8;">' + esc(c) + "</th>";
+        }).join("");
+        var trs = t.linhas.map(function (r) {
+          return "<tr>" + r.map(function (c, i) {
+            return '<td style="padding:8px;font-size:12px;text-align:' + (i >= t.numDesde ? "right" : "left") + ';border-bottom:1px solid #f0f2f5;">' + esc(c) + "</td>";
+          }).join("") + "</tr>";
+        }).join("");
+        return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:10px;border:1px solid #dfe3e8;border-radius:6px;border-collapse:separate;overflow:hidden;">' +
+          (t.titulo ? '<tr><td colspan="' + t.colunas.length + '" style="padding:8px;background:#16325c;color:#ffffff;font-size:12px;font-weight:bold;">' + esc(t.titulo) + "</td></tr>" : "") +
+          "<tr>" + th + "</tr>" + trs + "</table>";
+      }
+
+      function secao(s, i) {
+        return '<tr><td style="padding:0 28px 20px;">' +
+          '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e3e8ee;border-radius:8px;">' +
+          '<tr><td style="padding:10px 14px;background:#eef6ec;border-bottom:1px solid #d9ead3;border-radius:8px 8px 0 0;">' +
+          '<span style="display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:50%;background:#2e844a;color:#ffffff;font-size:12px;font-weight:bold;margin-right:8px;">' + (i + 1) + "</span>" +
+          '<span style="font-size:13px;font-weight:bold;letter-spacing:.04em;color:#16325c;text-transform:uppercase;">' + esc(s.titulo) + "</span></td></tr>" +
+          '<tr><td style="padding:6px 14px 12px;">' +
+          (s.destaque ? '<p style="margin:8px 0 10px;padding:10px 12px;background:#f8fafc;border-left:3px solid #2e844a;font-size:13px;line-height:1.55;white-space:pre-line;">' + esc(s.destaque) + "</p>" : "") +
+          '<table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + (s.linhas || []).map(linha).join("") + "</table>" +
+          (s.tabela ? tabela(s.tabela) : "") +
+          "</td></tr></table></td></tr>";
+      }
+
+      document.title = "[ATEC] " + d.numero + " — Ficha de aprovação do reparo (" + d.valor + ")";
+      document.getElementById("email").innerHTML =
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:680px;margin:0 auto;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(22,50,92,.08);">' +
+        // cabeçalho
+        '<tr><td style="background:#232224;padding:18px 28px;">' +
+        '<table role="presentation" width="100%"><tr>' +
+        '<td style="vertical-align:middle;"><img src="' + esc(d.logo) + '" alt="Opus" width="80" style="display:inline-block;vertical-align:middle;" />' +
+        '<span style="color:#ffffff;font-size:18px;font-weight:bold;margin-left:10px;vertical-align:middle;">ATEC</span></td>' +
+        '<td style="text-align:right;color:#c9cdd2;font-size:12px;vertical-align:middle;">Ficha Corporativa de Aprovação<br />Garantia | Assistência Técnica | Exceções</td>' +
+        "</tr></table></td></tr>" +
+        // destaque da aprovação
+        '<tr><td style="padding:28px 28px 8px;">' +
+        '<p style="margin:0 0 4px;font-size:13px;color:#5b6573;">Olá, ' + esc(d.aprovador) + ",</p>" +
+        '<p style="margin:0 0 18px;font-size:15px;line-height:1.5;">A ATEC <strong>' + esc(d.numero) + "</strong> aguarda a sua aprovação para o reparo. A ficha abaixo foi preenchida por <strong>" + esc(d.analista) + "</strong>.</p>" +
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f8fe;border:1px solid #cfe0f5;border-radius:8px;">' +
+        '<tr><td style="padding:16px 18px;">' +
+        '<p style="margin:0;font-size:12px;color:#5b6573;text-transform:uppercase;letter-spacing:.05em;">Valor para aprovação</p>' +
+        '<p style="margin:4px 0 6px;font-size:28px;font-weight:bold;color:#16325c;">' + esc(d.valor) + "</p>" +
+        '<p style="margin:0;font-size:13px;color:#374151;">Alçada: <strong>' + esc(d.aprovador) + "</strong> (" + esc(d.faixa) + ") · " + esc(d.empreendimento) + " · Unidade " + esc(d.unidade) + "</p>" +
+        "</td>" +
+        '<td style="padding:16px 18px;text-align:right;vertical-align:middle;">' +
+        '<a href="' + esc(d.link) + '" style="display:inline-block;padding:11px 18px;background:#0176d3;color:#ffffff;text-decoration:none;border-radius:6px;font-size:14px;font-weight:bold;">Abrir ATEC para aprovar</a>' +
+        "</td></tr></table></td></tr>" +
+        '<tr><td style="padding:16px 0 0;"></td></tr>' +
+        d.secoes.map(function (s, i) { return secao(s, i); }).join("") +
+        // rodapé
+        '<tr><td style="padding:4px 28px 26px;font-size:12px;color:#6b7280;line-height:1.5;">' +
+        "Enviado em " + esc(d.enviadoEm) + " para " + esc(d.para) + ". A decisão (aprovar ou reprovar com comentário) é registrada na própria ATEC.<br />E-mail automático do Portal Assistência Técnica Opus. Não responda a esta mensagem." +
+        "</td></tr></table>";
+    })();
+  </script>
+</body>
+</html>
