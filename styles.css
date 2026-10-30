@@ -449,6 +449,15 @@ body {
   content: "✓ ";
 }
 
+/* path: rótulos longos ("Planejamento e Orçamento") quebram em vez de cortar */
+.slds-path__title {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  line-height: 1;
+  font-size: 0.72rem;
+}
+
 /* path: etapa pulada */
 .slds-path__item.path-nao-se-aplica .slds-path__title {
   text-decoration: line-through;
@@ -742,7 +751,7 @@ body {
 
 .aprov-historico {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
   gap: 1rem;
   margin-bottom: 1rem;
 }
@@ -1534,3 +1543,8 @@ body {
 .ficha-secao .form-grid-slds { margin-top: 0.5rem; }
 .email-preview--pagina { height: 75vh; margin: 0.75rem 0; }
 @media (max-width: 768px) { .ficha-pergunta { grid-template-columns: 1fr; } }
+
+/* tabela de reparos anteriores não sai do cartão */
+.aprov-historico .mini-table { table-layout: auto; width: 100%; }
+.aprov-historico .mini-table th,
+.aprov-historico .mini-table td { padding-left: 0.5rem; padding-right: 0.5rem; white-space: normal; }

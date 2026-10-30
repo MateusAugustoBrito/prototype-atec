@@ -10,7 +10,7 @@ Protótipo estático, sem Salesforce. Abra `index.html` no navegador. Os dados f
 
 ## Fluxo
 
-Abertura → Triagem → Vistoria → Investigação → Planejamento e Orçamento → Aprovação → Reparo → Finalizada. A Negativa pode começar na Análise Nível 02, na Investigação ou na Análise Obra.
+Abertura → Triagem → Vistoria → Investigação → Planejamento e Orçamento → Aprovação → Reparo → Finalizada. A Negativa pode começar na Análise Nível 02 ou na Investigação.
 
 | Regra | Onde está |
 |---|---|

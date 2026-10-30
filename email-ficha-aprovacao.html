@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>[ATEC] Ficha de aprovação</title>
   <!--
     E-mail enviado à Supervisora ATEC ou ao Diretor quando a aprovação do reparo
@@ -10,8 +11,19 @@
     Assunto: [ATEC] {numero} — Ficha de aprovação do reparo ({valor})
     No protótipo, o conteúdo chega pelo hash da URL (JSON) e é montado abaixo;
     em produção, o mesmo layout é gerado no servidor (tabelas e estilos inline,
-    compatíveis com clientes de e-mail).
+    compatíveis com clientes de e-mail). Em telas estreitas as colunas empilham.
   -->
+  <style>
+    @media (max-width: 640px) {
+      .cel { display: block !important; width: 100% !important; box-sizing: border-box; padding-left: 0 !important; padding-right: 0 !important; }
+      .cel-faixa { padding-left: 16px !important; padding-right: 16px !important; }
+      .acao { text-align: left !important; padding-top: 14px !important; }
+      .rolavel th, .rolavel td { padding: 6px 4px !important; font-size: 11px !important; white-space: normal !important; }
+      .cabecalho-direita { display: none !important; }
+      .indicador { display: block !important; width: 100% !important; box-sizing: border-box; margin-bottom: 6px; }
+      .espaco { display: none !important; }
+    }
+  </style>
 </head>
 <body style="margin:0;padding:24px 12px;background:#eef1f5;font-family:Arial,Helvetica,sans-serif;color:#1f2937;">
   <div id="email"></div>
@@ -24,84 +36,196 @@
           return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
         });
       };
+      var vazio = function (v) { return v == null || v === ""; };
 
       var CORES_RISCO = { Baixo: "#2e844a", "Médio": "#b86e00", Alto: "#ba0517" };
+      var FUNDOS_RISCO = { Baixo: "#eef6ec", "Médio": "#fdf3e1", Alto: "#fdecea" };
+      var TONS = {
+        ok: { cor: "#2e844a", fundo: "#eef6ec" },
+        alerta: { cor: "#b86e00", fundo: "#fdf3e1" },
+        erro: { cor: "#ba0517", fundo: "#fdecea" },
+        neutro: { cor: "#16325c", fundo: "#f3f6f9" }
+      };
 
-      // opções em "pílulas": marcadas em destaque, as demais apagadas
-      function opcoes(lista, marcadas, risco) {
-        return lista.map(function (op) {
-          var on = marcadas.indexOf(op) >= 0;
-          var cor = risco && CORES_RISCO[op] ? CORES_RISCO[op] : "#16325c";
-          var estilo = on
-            ? "background:" + cor + ";color:#ffffff;border:1px solid " + cor + ";font-weight:bold;"
-            : "background:#ffffff;color:#9aa3ae;border:1px solid #dfe3e8;";
-          return '<span style="display:inline-block;margin:2px 4px 2px 0;padding:3px 10px;border-radius:999px;font-size:12px;' + estilo + '">' +
-            (on ? "&#10003; " : "") + esc(op) + "</span>";
+      var rotuloTopo = function (t) {
+        return '<div style="font-size:11px;line-height:1.3;color:#5b6573;margin-bottom:3px;">' + esc(t) + "</div>";
+      };
+
+      // Só a opção marcada: quem aprova lê a resposta, não a lista de alternativas
+      function chips(l) {
+        var marcadas = l.marcadas || [];
+        if (!marcadas.length) return '<span style="font-size:13px;color:#9aa3ae;">Não informado</span>';
+        return marcadas.map(function (op) {
+          var cor = l.risco && CORES_RISCO[op] ? CORES_RISCO[op] : (op === "Não" ? "#5b6573" : op === "NA" ? "#8b95a1" : "#16325c");
+          return '<span style="display:inline-block;margin:1px 4px 1px 0;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:bold;white-space:nowrap;background:' + cor + ';color:#ffffff;">' + esc(op) + "</span>";
         }).join("");
       }
 
-      function linha(l) {
-        var valor = l.opcoes ? opcoes(l.opcoes, l.marcadas || [], l.risco) : '<span style="white-space:pre-line;">' + esc(l.valor) + "</span>";
-        return '<tr>' +
-          '<td style="padding:8px 12px 8px 0;width:42%;vertical-align:top;font-size:13px;color:#5b6573;border-bottom:1px solid #f0f2f5;">' + esc(l.rotulo) + "</td>" +
-          '<td style="padding:8px 0;vertical-align:top;font-size:13px;color:#111827;border-bottom:1px solid #f0f2f5;">' + valor + "</td></tr>";
+      // Grade de N colunas; as células empilham no celular
+      function grade(celulas, n, espaco) {
+        var linhas = [];
+        for (var i = 0; i < celulas.length; i += n) linhas.push(celulas.slice(i, i + n));
+        var largura = Math.floor(100 / n) + "%";
+        return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + linhas.map(function (ls) {
+          var tds = ls.map(function (c, i) {
+            return '<td class="cel" width="' + largura + '" style="width:' + largura + ";vertical-align:top;padding:" + (espaco || "7px") + " " + (i === n - 1 ? "0" : "14px") + " " + (espaco || "7px") + ' 0;">' + c + "</td>";
+          }).join("");
+          for (var k = ls.length; k < n; k++) tds += '<td class="cel" width="' + largura + '" style="width:' + largura + ';"></td>';
+          return "<tr>" + tds + "</tr>";
+        }).join("") + "</table>";
+      }
+
+      function campoTexto(l) {
+        return rotuloTopo(l.rotulo) + '<div style="font-size:13px;line-height:1.4;color:#111827;white-space:pre-line;">' + esc(l.valor) + "</div>";
+      }
+
+      function campoOpcao(l) {
+        return rotuloTopo(l.rotulo) + chips(l);
+      }
+
+      // Pergunta à esquerda, resposta à direita, em duas colunas: cabe a checklist inteira
+      function checks(linhas) {
+        return grade(linhas.map(function (l) {
+          return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-bottom:1px solid #f0f2f5;"><tr>' +
+            '<td style="padding:5px 8px 5px 0;font-size:13px;line-height:1.3;color:#374151;vertical-align:middle;">' + esc(l.rotulo) + "</td>" +
+            '<td style="padding:5px 0;text-align:right;vertical-align:middle;white-space:nowrap;">' + chips(l) + "</td></tr></table>";
+        }), 2, "0");
+      }
+
+      // Campos em grade; textos longos ocupam a linha inteira
+      function corpoPadrao(s) {
+        var linhas = (s.linhas || []).filter(function (l) { return l.opcoes || !vazio(l.valor); });
+        var n = s.colunas || 2;
+        var ehCheck = function (l) { return l.opcoes && l.opcoes.length <= 3; };
+        var perguntas = s.colunas === 1 || s.semPerguntas ? [] : linhas.filter(ehCheck);
+        var resto = linhas.filter(function (l) { return perguntas.indexOf(l) < 0; });
+        var curtos = resto.filter(function (l) { return l.opcoes || String(l.valor).length <= 70; });
+        var longos = resto.filter(function (l) { return curtos.indexOf(l) < 0; });
+        var html = "";
+        if (curtos.length) html += grade(curtos.map(function (l) { return l.opcoes ? campoOpcao(l) : campoTexto(l); }), n);
+        if (longos.length) html += grade(longos.map(campoTexto), longos.length === 1 ? 1 : Math.min(n, 2));
+        if (perguntas.length) html += '<div style="margin-top:' + (html ? "8px" : "0") + ';">' + checks(perguntas) + "</div>";
+        return html;
+      }
+
+      // Cartões lado a lado (matriz de risco, aprovações)
+      function faixas(s) {
+        var linhas = s.linhas || [];
+        return grade(linhas.map(function (l) {
+          var op = (l.marcadas || [])[0];
+          var fundo = l.risco && FUNDOS_RISCO[op] ? FUNDOS_RISCO[op] : "#f7f9fb";
+          var conteudo = l.opcoes ? chips(l) : '<span style="font-size:13px;font-weight:bold;color:#16325c;">' + esc(l.valor) + "</span>";
+          return '<div style="background:' + fundo + ';border-radius:6px;padding:10px 12px;">' + rotuloTopo(l.rotulo) + conteudo + "</div>";
+        }), linhas.length, "4px");
+      }
+
+      function orcamento(s) {
+        var partes = s.composicao || [];
+        var soma = partes.reduce(function (t, p) { return t + (p.numero || 0); }, 0);
+        var CORES_BARRA = ["#16325c", "#0176d3", "#7fb5e6", "#b9c7d6"];
+        var cartoes = partes.map(function (p) {
+          return '<div style="background:#f7f9fb;border-radius:6px;padding:10px 12px;">' + rotuloTopo(p.rotulo) +
+            '<span style="font-size:14px;font-weight:bold;color:' + (p.numero ? "#111827" : "#9aa3ae") + ';">' + (p.numero ? esc(p.valor) : "—") + "</span></div>";
+        });
+        cartoes.push('<div style="background:#16325c;border-radius:6px;padding:10px 12px;"><div style="font-size:11px;line-height:1.3;color:#c9d6e6;margin-bottom:3px;">Total</div><span style="font-size:14px;font-weight:bold;color:#ffffff;">' + esc(s.total) + "</span></div>");
+        var barra = "";
+        if (soma > 0) {
+          var usadas = partes.map(function (p, i) { return { p: p, cor: CORES_BARRA[i] }; }).filter(function (x) { return x.p.numero; });
+          barra = '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 4px;border-radius:4px;overflow:hidden;"><tr>' +
+            usadas.map(function (x) {
+              return '<td height="8" title="' + esc(x.p.rotulo) + '" style="height:8px;line-height:8px;font-size:0;background:' + x.cor + ";width:" + Math.round((x.p.numero / soma) * 100) + '%;">&nbsp;</td>';
+            }).join("") + "</tr></table>" +
+            '<div style="font-size:11px;color:#5b6573;margin-bottom:6px;">' + usadas.map(function (x) {
+              return '<span style="display:inline-block;margin-right:12px;white-space:nowrap;"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;background:' + x.cor + ';"></span>' + esc(x.p.rotulo) + " " + Math.round((x.p.numero / soma) * 100) + "%</span>";
+            }).join("") + "</div>";
+        }
+        return grade(cartoes, cartoes.length, "4px") + barra + corpoPadrao(s) + (s.tabela ? tabela(s.tabela) : "");
       }
 
       function tabela(t) {
         var th = t.colunas.map(function (c, i) {
-          return '<th style="padding:8px;background:#f3f6f9;color:#16325c;font-size:12px;text-align:' + (i >= t.numDesde ? "right" : "left") + ';border-bottom:1px solid #dfe3e8;">' + esc(c) + "</th>";
+          return '<th style="padding:7px 8px;background:#f3f6f9;color:#16325c;font-size:11px;text-align:' + (i >= t.numDesde ? "right" : "left") + ';border-bottom:1px solid #dfe3e8;">' + esc(c) + "</th>";
         }).join("");
         var trs = t.linhas.map(function (r) {
           return "<tr>" + r.map(function (c, i) {
-            return '<td style="padding:8px;font-size:12px;text-align:' + (i >= t.numDesde ? "right" : "left") + ';border-bottom:1px solid #f0f2f5;">' + esc(c) + "</td>";
+            return '<td style="padding:7px 8px;font-size:12px;text-align:' + (i >= t.numDesde ? "right;white-space:nowrap" : "left") + ';border-bottom:1px solid #f0f2f5;">' + esc(c) + "</td>";
           }).join("") + "</tr>";
         }).join("");
-        return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:10px;border:1px solid #dfe3e8;border-radius:6px;border-collapse:separate;overflow:hidden;">' +
-          (t.titulo ? '<tr><td colspan="' + t.colunas.length + '" style="padding:8px;background:#16325c;color:#ffffff;font-size:12px;font-weight:bold;">' + esc(t.titulo) + "</td></tr>" : "") +
+        return '<div style="margin-top:8px;font-size:11px;font-weight:bold;color:#16325c;">' + esc(t.titulo) + "</div>" +
+          '<table class="rolavel" role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:4px;border:1px solid #dfe3e8;border-radius:6px;border-collapse:separate;">' +
           "<tr>" + th + "</tr>" + trs + "</table>";
       }
 
-      function secao(s, i) {
-        return '<tr><td style="padding:0 28px 20px;">' +
-          '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e3e8ee;border-radius:8px;">' +
-          '<tr><td style="padding:10px 14px;background:#eef6ec;border-bottom:1px solid #d9ead3;border-radius:8px 8px 0 0;">' +
-          '<span style="display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:50%;background:#2e844a;color:#ffffff;font-size:12px;font-weight:bold;margin-right:8px;">' + (i + 1) + "</span>" +
-          '<span style="font-size:13px;font-weight:bold;letter-spacing:.04em;color:#16325c;text-transform:uppercase;">' + esc(s.titulo) + "</span></td></tr>" +
-          '<tr><td style="padding:6px 14px 12px;">' +
-          (s.destaque ? '<p style="margin:8px 0 10px;padding:10px 12px;background:#f8fafc;border-left:3px solid #2e844a;font-size:13px;line-height:1.55;white-space:pre-line;">' + esc(s.destaque) + "</p>" : "") +
-          '<table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + (s.linhas || []).map(linha).join("") + "</table>" +
-          (s.tabela ? tabela(s.tabela) : "") +
-          "</td></tr></table></td></tr>";
+      function cartaoSecao(s, numero) {
+        var corpo = s.layout === "orcamento" ? orcamento(s) : s.layout === "faixas" ? faixas(s) : corpoPadrao(s);
+        var destaque = s.destaque
+          ? '<div style="margin:2px 0 8px;padding:9px 12px;background:#f7f9fb;border-left:3px solid #16325c;font-size:13px;line-height:1.5;white-space:pre-line;">' + esc(s.destaque) + "</div>"
+          : "";
+        return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="height:100%;border:1px solid #e3e8ee;border-radius:8px;">' +
+          '<tr><td height="1" style="height:1px;padding:10px 14px 2px;">' +
+          '<span style="font-size:12px;font-weight:bold;color:#0176d3;margin-right:6px;">' + numero + "</span>" +
+          '<span style="font-size:12px;font-weight:bold;letter-spacing:.04em;color:#16325c;text-transform:uppercase;">' + esc(s.titulo) + "</span></td></tr>" +
+          '<tr><td style="vertical-align:top;padding:4px 14px 10px;">' + destaque + corpo + "</td></tr></table>";
+      }
+
+      // Seções marcadas com "par" ficam lado a lado
+      function secoes(lista) {
+        var html = "";
+        for (var i = 0; i < lista.length; i++) {
+          var s = lista[i];
+          if (s.par && lista[i + 1] && lista[i + 1].par) {
+            html += '<tr><td class="cel-faixa" style="padding:0 24px 12px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' +
+              '<td class="cel" width="50%" style="width:50%;height:1px;vertical-align:top;padding-right:6px;">' + cartaoSecao(s, i + 1) + "</td>" +
+              '<td class="cel" width="50%" style="width:50%;height:1px;vertical-align:top;padding-left:6px;">' + cartaoSecao(lista[i + 1], i + 2) + "</td>" +
+              "</tr></table></td></tr>";
+            i++;
+          } else {
+            html += '<tr><td class="cel-faixa" style="padding:0 24px 12px;">' + cartaoSecao(s, i + 1) + "</td></tr>";
+          }
+        }
+        return html;
+      }
+
+      // Fundo na própria célula: os indicadores ficam com a mesma altura
+      function indicadores(lista) {
+        var n = (lista || []).length;
+        var largura = ((100 - 1.5 * (n - 1)) / n) + "%";
+        return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' + (lista || []).map(function (ind, i) {
+          var tom = TONS[ind.tom] || TONS.neutro;
+          return (i ? '<td class="espaco" style="width:1.5%;font-size:0;">&nbsp;</td>' : "") +
+            '<td class="indicador" width="' + largura + '" style="width:' + largura + ";vertical-align:top;background:" + tom.fundo + ";border-left:3px solid " + tom.cor + ';border-radius:4px;padding:9px 12px;">' +
+            rotuloTopo(ind.rotulo) +
+            '<div style="font-size:14px;line-height:1.25;font-weight:bold;color:' + tom.cor + ';">' + esc(ind.valor) + "</div>" +
+            (ind.detalhe ? '<div style="font-size:11px;line-height:1.3;color:#5b6573;margin-top:2px;">' + esc(ind.detalhe) + "</div>" : "") +
+            "</td>";
+        }).join("") + "</tr></table>";
       }
 
       document.title = "[ATEC] " + d.numero + " — Ficha de aprovação do reparo (" + d.valor + ")";
       document.getElementById("email").innerHTML =
-        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:680px;margin:0 auto;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(22,50,92,.08);">' +
-        // cabeçalho
-        '<tr><td style="background:#232224;padding:18px 28px;">' +
-        '<table role="presentation" width="100%"><tr>' +
-        '<td style="vertical-align:middle;"><img src="' + esc(d.logo) + '" alt="Opus" width="80" style="display:inline-block;vertical-align:middle;" />' +
-        '<span style="color:#ffffff;font-size:18px;font-weight:bold;margin-left:10px;vertical-align:middle;">ATEC</span></td>' +
-        '<td style="text-align:right;color:#c9cdd2;font-size:12px;vertical-align:middle;">Ficha Corporativa de Aprovação<br />Garantia | Assistência Técnica | Exceções</td>' +
-        "</tr></table></td></tr>" +
-        // destaque da aprovação
-        '<tr><td style="padding:28px 28px 8px;">' +
-        '<p style="margin:0 0 4px;font-size:13px;color:#5b6573;">Olá, ' + esc(d.aprovador) + ",</p>" +
-        '<p style="margin:0 0 18px;font-size:15px;line-height:1.5;">A ATEC <strong>' + esc(d.numero) + "</strong> aguarda a sua aprovação para o reparo. A ficha abaixo foi preenchida por <strong>" + esc(d.analista) + "</strong>.</p>" +
-        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f8fe;border:1px solid #cfe0f5;border-radius:8px;">' +
-        '<tr><td style="padding:16px 18px;">' +
-        '<p style="margin:0;font-size:12px;color:#5b6573;text-transform:uppercase;letter-spacing:.05em;">Valor para aprovação</p>' +
-        '<p style="margin:4px 0 6px;font-size:28px;font-weight:bold;color:#16325c;">' + esc(d.valor) + "</p>" +
-        '<p style="margin:0;font-size:13px;color:#374151;">Alçada: <strong>' + esc(d.aprovador) + "</strong> (" + esc(d.faixa) + ") · " + esc(d.empreendimento) + " · Unidade " + esc(d.unidade) + "</p>" +
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:860px;margin:0 auto;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(22,50,92,.08);">' +
+        // cabeçalho + decisão
+        '<tr><td class="cel-faixa" style="background:#232224;padding:16px 24px 20px;">' +
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' +
+        '<td style="vertical-align:middle;"><img src="' + esc(d.logo) + '" alt="Opus" width="72" style="display:inline-block;vertical-align:middle;" />' +
+        '<span style="color:#ffffff;font-size:16px;font-weight:bold;margin-left:8px;vertical-align:middle;">ATEC</span></td>' +
+        '<td class="cabecalho-direita" style="text-align:right;color:#c9cdd2;font-size:11px;line-height:1.4;vertical-align:middle;">Ficha Corporativa de Aprovação<br />Garantia | Assistência Técnica | Exceções</td>' +
+        "</tr></table>" +
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px;"><tr>' +
+        '<td class="cel" style="vertical-align:bottom;">' +
+        '<div style="font-size:13px;line-height:1.4;color:#e5e7eb;">Olá, ' + esc(d.aprovador) + ". A <strong>" + esc(d.numero) + "</strong> aguarda a sua aprovação. Ficha preenchida por <strong>" + esc(d.analista) + "</strong>.</div>" +
+        '<div style="font-size:32px;line-height:1.2;font-weight:bold;color:#ffffff;margin-top:8px;">' + esc(d.valor) + "</div>" +
+        '<div style="font-size:12px;line-height:1.4;color:#c9cdd2;margin-top:2px;">Alçada ' + esc(d.aprovador) + " (" + esc(d.faixa) + ") · " + esc(d.empreendimento) + " · Unidade " + esc(d.unidade) + "</div>" +
         "</td>" +
-        '<td style="padding:16px 18px;text-align:right;vertical-align:middle;">' +
-        '<a href="' + esc(d.link) + '" style="display:inline-block;padding:11px 18px;background:#0176d3;color:#ffffff;text-decoration:none;border-radius:6px;font-size:14px;font-weight:bold;">Abrir ATEC para aprovar</a>' +
+        '<td class="cel acao" style="vertical-align:bottom;text-align:right;white-space:nowrap;padding-left:16px;">' +
+        '<a href="' + esc(d.link) + '" style="display:inline-block;padding:11px 20px;background:#0176d3;color:#ffffff;text-decoration:none;border-radius:6px;font-size:14px;font-weight:bold;">Abrir ATEC para aprovar</a>' +
         "</td></tr></table></td></tr>" +
-        '<tr><td style="padding:16px 0 0;"></td></tr>' +
-        d.secoes.map(function (s, i) { return secao(s, i); }).join("") +
+        // o que decide a aprovação, antes dos detalhes
+        '<tr><td class="cel-faixa" style="padding:14px 24px 12px;">' + indicadores(d.indicadores) + "</td></tr>" +
+        secoes(d.secoes) +
         // rodapé
-        '<tr><td style="padding:4px 28px 26px;font-size:12px;color:#6b7280;line-height:1.5;">' +
-        "Enviado em " + esc(d.enviadoEm) + " para " + esc(d.para) + ". A decisão (aprovar ou reprovar com comentário) é registrada na própria ATEC.<br />E-mail automático do Portal Assistência Técnica Opus. Não responda a esta mensagem." +
+        '<tr><td class="cel-faixa" style="padding:2px 24px 20px;font-size:11px;color:#6b7280;line-height:1.5;">' +
+        "Enviado em " + esc(d.enviadoEm) + " para " + esc(d.para) + ". A decisão (aprovar ou reprovar com comentário) é registrada na própria ATEC. E-mail automático do Portal Assistência Técnica Opus. Não responda a esta mensagem." +
         "</td></tr></table>";
     })();
   </script>

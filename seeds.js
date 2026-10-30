@@ -7,8 +7,8 @@ const ASSINATURA_EXEMPLO = "data:image/svg+xml," + encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="460" height="150"><path d="M30 105c25-60 45-70 55-40s-5 45 15 20 30-55 45-30 0 40 20 25 25-35 40-20 10 30 30 15 35-30 60-25 45 10 80 5" fill="none" stroke="#16325c" stroke-width="3" stroke-linecap="round"/></svg>'
 );
 
-// Clientes, empreendimentos e unidades reais (dados-portal.js); telefone e
-// e-mail continuam fictícios.
+// Empreendimentos e unidades reais (dados-portal.js); nomes de clientes,
+// telefone e e-mail são fictícios.
 function clienteReal(i) {
   const c = PORTAL.clientes[i % PORTAL.clientes.length];
   const primeiro = c.nome.split(" ")[0].normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();

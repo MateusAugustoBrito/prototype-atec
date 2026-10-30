@@ -407,7 +407,7 @@ function graficoSemanal(atecs) {
   const abertas = dias.map((d) => atecs.filter((a) => mesmoDia(a.CreatedDate, d)).length);
   const fechadas = dias.map((d) => atecs.filter((a) => mesmoDia(dataFechamento(a), d)).length);
   const max = Math.max(4, ...abertas, ...fechadas);
-  const W = 720, H = 260, esq = 46, dir = 16, topo = 34, base = 46;
+  const W = 720, H = 260, esq = 46, dir = 34, topo = 34, base = 46;
   const x = (i) => esq + (i * (W - esq - dir)) / 6;
   const y = (v) => topo + (H - topo - base) * (1 - v / max);
   const ns = "http://www.w3.org/2000/svg";
@@ -1914,6 +1914,10 @@ function dadosFichaEmail(atec, fi) {
   const op = (rotulo, opcoes, marcadas, risco) => ({ rotulo, opcoes, marcadas: [].concat(marcadas || []).filter(Boolean), risco });
   const tx = (rotulo, valor) => ({ rotulo, valor });
   const brl = (v) => (v != null && v !== "" ? fmtBRL(v) : "");
+  const parte = (rotulo, v) => ({ rotulo, valor: brl(v), numero: Number(v) || 0 });
+  const riscosAltos = (nivel) => FICHA.riscos.filter((r) => fi.risco[r] === nivel);
+  const maiorRisco = ["Alto", "Médio", "Baixo"].find((n) => riscosAltos(n).length);
+  const dentroPrazo = fi.garantia.dentroPrazo;
   return {
     numero: atec.Name,
     valor: fmtBRL(ap.valor),
@@ -1926,8 +1930,14 @@ function dadosFichaEmail(atec, fi) {
     enviadoEm: fmtDate(fi.enviadaEm || new Date().toISOString()),
     link: `${location.href.split("#")[0]}#/detalhe/${atec.id}`,
     logo: new URL("img/logo-opus-light.png", location.href).href,
+    indicadores: [
+      { rotulo: "Garantia", valor: dentroPrazo === "Sim" ? "Dentro do prazo" : dentroPrazo === "Não" ? "Fora do prazo" : "Não informado", detalhe: fi.prazoAplicavel, tom: dentroPrazo === "Sim" ? "ok" : dentroPrazo === "Não" ? "erro" : "neutro" },
+      { rotulo: "Impacto", valor: [].concat(fi.impacto || []).join(", ") || "Não informado", tom: "neutro" },
+      { rotulo: "Maior risco", valor: maiorRisco || "Não informado", detalhe: maiorRisco ? riscosAltos(maiorRisco).join(", ") : "", tom: { Alto: "erro", "Médio": "alerta", Baixo: "ok" }[maiorRisco] || "neutro" },
+      { rotulo: "Parecer da Assistência Técnica", valor: fi.parecerAT || "Não informado", tom: fi.parecerAT === "Favorável" ? "ok" : fi.parecerAT ? "erro" : "neutro" }
+    ],
     secoes: [
-      { titulo: "Identificação da solicitação", linhas: [
+      { titulo: "Identificação da solicitação", colunas: 4, linhas: [
         tx("Nº ATEC", atec.Name), tx("Data abertura", fmtDia(atec.CreatedDate.slice(0, 10))), tx("Empreendimento", atec.Empreendimento),
         tx("Unidade", atec.Unidade), tx("Cliente", atec.Cliente), op("Origem", FICHA.origens, fi.origem),
         tx("Responsável pela tratativa", atec.AnalistaResponsavel), tx("Data da análise", fmtDia(fi.dataAnalise))
@@ -1937,8 +1947,8 @@ function dadosFichaEmail(atec, fi) {
         ...FICHA.garantia.map(([k, r]) => op(r, ["Sim", "Não"], fi.garantia[k])),
         tx("Prazo de garantia aplicável", fi.prazoAplicavel), tx("Fundamentação", fi.fundamentacao)
       ] },
-      { titulo: "Casos fora da garantia — liberalidade", linhas: [op("Motivo para atendimento", FICHA.motivosLiberalidade, fi.liberalidade), tx("Justificativa", fi.justificativa)] },
-      { titulo: "Perfil do cliente", linhas: [
+      { titulo: "Casos fora da garantia — liberalidade", par: true, colunas: 1, linhas: [op("Motivo para atendimento", FICHA.motivosLiberalidade, fi.liberalidade), tx("Justificativa", fi.justificativa)] },
+      { titulo: "Perfil do cliente", par: true, colunas: 1, linhas: [
         op("Qual o perfil do cliente?", FICHA.perfisCliente, fi.perfilCliente), op("Cliente tem mais de 1 unidade?", ["Sim", "Não"], fi.maisUnidades),
         tx("Em caso positivo, quantas unidades?", fi.maisUnidades === "Sim" ? fi.quantasUnidades : "")
       ] },
@@ -1947,15 +1957,16 @@ function dadosFichaEmail(atec, fi) {
         tx("Solução técnica recomendada", fi.solucao), tx("Quem assume a responsabilidade técnica?", fi.responsabilidadeTecnica),
         ...FICHA.tecnica.map(([k, r, ops]) => op(r, ops, fi.tecnica[k]))
       ] },
-      { titulo: "Orçamento", linhas: [
-        tx("Material", brl(fi.orc.material)), tx("Mão de obra", brl(fi.orc.maoDeObra)), tx("Equipamentos", brl(fi.orc.equipamentos)), tx("Outros", brl(fi.orc.outros)),
-        tx("Total", `${fmtBRL(ap.valor)}${p.valorNegociado != null ? " (negociado com Suprimentos)" : ""}`),
+      { titulo: "Orçamento", layout: "orcamento", colunas: 3, semPerguntas: true,
+        composicao: [parte("Material", fi.orc.material), parte("Mão de obra", fi.orc.maoDeObra), parte("Equipamentos", fi.orc.equipamentos), parte("Outros", fi.orc.outros)],
+        total: `${fmtBRL(ap.valor)}${p.valorNegociado != null ? " (negociado)" : ""}`,
+        linhas: [
         tx("Quantidade de orçamentos", `${(atec.cotacoes || []).length}: ${(atec.cotacoes || []).map((c) => `${c.Name} ${fmtBRL(c.valorTotal)}`).join(" / ")}`),
         tx("Fornecedor escolhido", p.fornecedor), tx("Motivo da escolha", fi.motivoEscolha), op("Existe preço tabelado para esse serviço?", ["Sim", "Não"], fi.precoTabelado)
       ], tabela: cot ? { titulo: `Itens da cotação ${cot.Name}`, colunas: ["Item", "Fornecedor", "Qtd.", "Vlr. Unit.", "Vlr. Total"], numDesde: 2,
         linhas: cot.itens.map((i) => [i.descricao, i.fornecedor, String(i.quantidade), fmtBRL(i.valorUnitario), fmtBRL(i.valorTotalItem)]) } : null },
-      { titulo: "Matriz de risco", linhas: FICHA.riscos.map((r) => op(r, FICHA.niveisRisco, fi.risco[r], true)) },
-      { titulo: "Aprovações", linhas: [
+      { titulo: "Matriz de risco", layout: "faixas", linhas: FICHA.riscos.map((r) => op(r, FICHA.niveisRisco, fi.risco[r], true)) },
+      { titulo: "Aprovações", layout: "faixas", linhas: [
         op("Assistência Técnica", FICHA.pareceres, fi.parecerAT), op("Engenharia", FICHA.engenharia, fi.engenharia),
         tx(ap.aprovador === ROLES.DIRETOR ? "Diretoria" : ap.aprovador, "Aguardando avaliação")
       ] }

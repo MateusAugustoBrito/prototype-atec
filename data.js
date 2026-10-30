@@ -68,8 +68,7 @@ const ANALISE_NIVEL_2_OPTIONS = [
 const CANAL_ABERTURA_OPTIONS = ["Front", "ATEC Salesforce", "Portal ATEC"];
 
 // ---- Distribuição automática: carteira (empreendimento) -> analistas, em rodízio ----
-// carteiras e analistas reais (dados-portal.js): os 2 analistas que mais
-// atendem cada empreendimento
+// carteiras por empreendimento (dados-portal.js); nomes de analistas fictícios
 const CARTEIRAS_ANALISTAS = Object.fromEntries(PORTAL.empreendimentos.map((e) => [e.nome, e.analistas]));
 const CARTEIRA_GERAL = { nome: "Carteira Geral", analistas: PORTAL.analistas };
 
@@ -194,7 +193,7 @@ const CHECKLIST_NIVEL_1 = {
     },
     {
       tipo: "tabela",
-      titulo: "MODIFICAÇÕES NA UNIDADE",
+      titulo: "REGISTRO DA ABERTURA",
       itens: [
         "Motivo da ATEC",
         "Ambiente afetado",
@@ -228,7 +227,7 @@ const INVESTIGACAO_CHECKLISTS = [
     subItem: "Localização dos pontos",
     arquivo: "Checklist ATEC Ar Condicionado Localizacao Pontos.docx",
     blocos: [
-      { tipo: "tabela", titulo: "GARANTIA", itens: ["Data do Habite-se validada", "Garantia consultada no Manual do Proprietário", "Item dentro do prazo de garantia (3 anos)", "Empreendimento possui regra específica"] },
+      { tipo: "tabela", titulo: "GARANTIA", itens: ["Data do Habite-se validada", "Garantia consultada no Manual do Proprietário", "Item dentro do prazo de garantia (5 anos)", "Empreendimento possui regra específica"] },
       { tipo: "tabela", titulo: "MODIFICAÇÕES", itens: ["Reforma no ambiente", "Alteração em gesso/forro", "Instalação de marcenaria", "Fechamento de varanda", "Alteração elétrica", "Alteração hidráulica", "Intervenção no ponto do ar-condicionado", "Outro"] },
       { tipo: "tabela", titulo: "VERIFICAÇÕES TÉCNICAS", itens: ["Cliente consultou memorial descritivo", "Cliente consultou projeto", "Já houve tentativa de instalação", "Já houve intervenção no ponto", "Ponto está visível", "Existe divergência entre projeto e execução"] },
       { tipo: "tabela", titulo: "EVIDÊNCIAS OBRIGATÓRIAS", itens: ["Foto geral do ambiente", "Foto do local do ponto", "Vídeo do ambiente", "Foto do projeto/memorial (se houver)", "Foto da infraestrutura existente"] },
@@ -242,7 +241,7 @@ const INVESTIGACAO_CHECKLISTS = [
     subItem: "Mau funcionamento",
     arquivo: "Checklist ATEC Esquadria Mau Funcionamento.docx",
     blocos: [
-      { tipo: "aberta", titulo: "GARANTIA", perguntas: ["As garantias para esse item são: Acima de 2 anos de habite-se: Não procedente por tempo de garantia; Até 1 ano de habite-se: possui garantia para partes móveis (inclusive recolhedores de palhetas/cordinha da persiana, motores e conjuntos elétricos de acionamento) e problemas com a vedação e funcionamento; Até 2 anos de habite-se: possui garantia para borrachas, escovas, articulações, fechos e roldanas. Exceções: Gyro Vaca Brava possui 3 anos de garantia."] },
+      { tipo: "aberta", titulo: "GARANTIA", perguntas: ["A garantia para esse item é de até 5 anos do Habite-se. Acima de 5 anos: não procedente por tempo de garantia."] },
       { tipo: "tabela", titulo: "MODIFICAÇÕES", itens: ["Instalação de persiana integrada", "Automação", "Repintura da esquadria", "Instalação de película", "Instalação de tela de proteção", "Troca de fechadura", "Perfuração da esquadria", "Marcenaria próxima", "Alteração de gesso/forro", "Reforma no ambiente", "Outro"] },
       { tipo: "tabela", titulo: "VERIFICAÇÕES ESPECÍFICAS", itens: ["A peça fecha totalmente", "A trava funciona corretamente", "Existe fresta visível", "Há entrada de água", "Há entrada de vento", "Há dificuldade para movimentação", "Existe ruído anormal", "Houve limpeza dos trilhos e drenos"] },
       { tipo: "tabela", titulo: "POSSÍVEIS IMPROCEDÊNCIAS", itens: ["Mau uso identificado", "Dano por impacto", "Falta de manutenção", "Modificação pelo cliente", "Intervenção de terceiros", "Desgaste natural"] },
@@ -258,7 +257,7 @@ const INVESTIGACAO_CHECKLISTS = [
     subItem: "Vedação",
     arquivo: "Checklist ATEC Esquadria Vedacao.docx",
     blocos: [
-      { tipo: "tabela", titulo: "GARANTIA", itens: ["Data do Habite-se validada", "Garantia consultada no Manual do Proprietário", "Item dentro do prazo de garantia (3 anos)", "Empreendimento possui regra específica"] },
+      { tipo: "tabela", titulo: "GARANTIA", itens: ["Data do Habite-se validada", "Garantia consultada no Manual do Proprietário", "Item dentro do prazo de garantia (5 anos)", "Empreendimento possui regra específica"] },
       { tipo: "tabela", titulo: "MODIFICAÇÕES", itens: ["Desmontagem da esquadria para troca de piso", "Instalação de persiana", "Automação", "Repintura da esquadria", "Troca de vidro", "Instalação de película", "Reforma no ambiente", "Outro"] },
       { tipo: "tabela", titulo: "VERIFICAÇÕES DE VEDAÇÃO", itens: ["Entrada de água", "Entrada de vento", "Entrada de poeira", "Entrada de ruído", "Problema ocorre em outras esquadrias", "Esquadria encosta em todo perímetro quando fechada", "Há deformação visível", "Drenos aparentam obstruídos"] },
       { tipo: "tabela", titulo: "EVIDÊNCIAS OBRIGATÓRIAS", itens: ["Foto geral do ambiente", "Foto da esquadria completa", "Foto do ponto de entrada", "Vídeo demonstrando a falha", "Vídeo durante chuva (se possível)", "Foto dos trilhos e drenos", "Foto das borrachas"] },
@@ -273,7 +272,7 @@ const INVESTIGACAO_CHECKLISTS = [
     subItem: "Vazão",
     arquivo: "Checklist ATEC Hidrossanitaria_ Vazao e Pressao.docx",
     blocos: [
-      { tipo: "tabela", titulo: "DESCLASSIFICATÓRIOS – GARANTIA", itens: ["Data do Habite-se validada", "Garantia consultada no Manual do Proprietário", "Empreendimento possui regra específica", "Item dentro do prazo de garantia (3 anos)"] },
+      { tipo: "tabela", titulo: "DESCLASSIFICATÓRIOS – GARANTIA", itens: ["Data do Habite-se validada", "Garantia consultada no Manual do Proprietário", "Empreendimento possui regra específica", "Item dentro do prazo de garantia (5 anos)"] },
       { tipo: "tabela", titulo: "MODIFICAÇÕES", itens: ["Reforma no ambiente", "Troca de torneira", "Troca de chuveiro", "Instalação de filtro", "Instalação de pressurizador", "Instalação de aquecedor", "Alteração hidráulica", "Outro"] },
       { tipo: "tabela", titulo: "VERIFICAÇÕES COM O CLIENTE", itens: ["Registro totalmente aberto", "Ponto já funcionou normalmente", "Outros pontos funcionam normalmente", "Houve interrupção recente no abastecimento", "Condomínio informou manutenção", "Existe pressurizador instalado", "Existe aquecedor instalado"] },
       { tipo: "tabela", titulo: "POSSÍVEIS IMPROCEDÊNCIAS", itens: ["Equipamento trocado pelo cliente", "Registro parcialmente fechado", "Restritor removido/alterado", "Pressurizador instalado posteriormente", "Problema causado por equipamento particular", "Alteração hidráulica realizada"] },
@@ -288,7 +287,7 @@ const INVESTIGACAO_CHECKLISTS = [
     subItem: "Manchamento",
     arquivo: "Checklist ATEC Pintura Manchamento.docx",
     blocos: [
-      { tipo: "tabela", titulo: "GARANTIA", itens: ["Data do Habite-se validada", "Garantia consultada no Manual do Proprietário", "Item dentro do prazo de garantia (2 anos)", "Empreendimento possui regra específica"] },
+      { tipo: "tabela", titulo: "GARANTIA", itens: ["Data do Habite-se validada", "Garantia consultada no Manual do Proprietário", "Item dentro do prazo de garantia (5 anos)", "Empreendimento possui regra específica"] },
       { tipo: "tabela", titulo: "MODIFICAÇÕES NO AMBIENTE", itens: ["Montagem de marcenaria", "Mudança com movimentação de móveis", "Reforma no ambiente", "Repintura parcial ou total", "Instalação de quadros ou objetos", "Instalação de papel de parede", "Limpeza química/produtos específicos", "Outro"] },
       { tipo: "tabela", titulo: "POSSÍVEIS IMPROCEDÊNCIAS", itens: ["Parede suja/encardida", "Marca de móvel ou quadro", "Respingo de limpeza", "Diferença estética sem perda funcional", "Repintura realizada pelo cliente", "Problema decorrente de uso"] },
       { tipo: "tabela", titulo: "EVIDÊNCIAS OBRIGATÓRIAS", itens: ["Foto geral do ambiente", "Foto aproximada da mancha", "Vídeo 360° do ambiente", "Foto com escala (régua ou objeto)", "Foto do teto e paredes adjacentes"] },
