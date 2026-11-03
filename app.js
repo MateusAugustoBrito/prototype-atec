@@ -656,7 +656,7 @@ function openModalCriarAtec() {
           }
           const atec = createAtec(form, getCurrentRole());
           closeModal();
-          showToast(`ATEC ${atec.Name} criada com sucesso!`);
+          showToast(`${atec.Name} criada com sucesso!`);
           navigate(`#/detalhe/${atec.id}`);
         }
       })
