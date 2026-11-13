@@ -1382,8 +1382,11 @@ function reduzirFoto(file) {
   });
 }
 
+// Mesmo valor do ?v= do index.html: evita o navegador usar o modelo de e-mail antigo em cache
+const VERSAO_PROTOTIPO = "20261113";
+
 function abrirPreviewEmail(arquivo, dados, titulo) {
-  const iframe = el("iframe", { class: "email-preview", src: `${arquivo}#${encodeURIComponent(JSON.stringify(dados))}`, title: titulo });
+  const iframe = el("iframe", { class: "email-preview", src: `${arquivo}?v=${VERSAO_PROTOTIPO}#${encodeURIComponent(JSON.stringify(dados))}`, title: titulo });
   const modalRef = sldsModal({
     title: titulo,
     bodyNode: [iframe],
@@ -2003,7 +2006,7 @@ function renderPaginaFicha(id) {
   else if (enviada) {
     corpo = el("div", {}, [
       el("div", { class: "selo selo-success selo-bloco" }, `Ficha enviada por e-mail para ${ap.ficha.para} (${ap.ficha.email}) em ${fmtDate(ap.ficha.enviadaEm)}.`),
-      el("iframe", { class: "email-preview email-preview--pagina", src: `email-ficha-aprovacao.html#${encodeURIComponent(JSON.stringify(dadosFichaEmail(atec, ap.ficha)))}`, title: "E-mail da ficha de aprovação" }),
+      el("iframe", { class: "email-preview email-preview--pagina", src: `email-ficha-aprovacao.html?v=${VERSAO_PROTOTIPO}#${encodeURIComponent(JSON.stringify(dadosFichaEmail(atec, ap.ficha)))}`, title: "E-mail da ficha de aprovação" }),
       botoes(botaoFecharAba())
     ]);
   } else {
