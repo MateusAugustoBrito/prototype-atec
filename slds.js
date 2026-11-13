@@ -174,10 +174,28 @@ function sldsPath(stages) {
   ]);
 }
 
+// "X" do fechar em SVG inline: o sprite de ícones do SLDS vem de outro domínio e
+// o navegador não desenha <use> externo, o que deixava o botão em branco
+function iconeFechar() {
+  const svgNs = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNs, "svg");
+  svg.setAttribute("class", "slds-button__icon slds-button__icon_large");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("aria-hidden", "true");
+  const path = document.createElementNS(svgNs, "path");
+  path.setAttribute("d", "M6 6l12 12M18 6L6 18");
+  path.setAttribute("stroke", "currentColor");
+  path.setAttribute("stroke-width", "2.5");
+  path.setAttribute("stroke-linecap", "round");
+  path.setAttribute("fill", "none");
+  svg.appendChild(path);
+  return svg;
+}
+
 function sldsModal({ title, bodyNode, footerNode, onClose }) {
   const backdrop = el("div", { class: "slds-backdrop slds-backdrop_open" });
-  const closeBtn = el("button", { class: "slds-button slds-button_icon slds-modal__close slds-button_icon-inverse", type: "button", title: "Fechar" }, [
-    sldsIcon("utility", "close", "slds-button__icon slds-button__icon_large"),
+  const closeBtn = el("button", { class: "slds-button slds-button_icon slds-modal__close", type: "button", title: "Fechar" }, [
+    iconeFechar(),
     el("span", { class: "slds-assistive-text" }, "Fechar")
   ]);
   closeBtn.addEventListener("click", () => onClose());
